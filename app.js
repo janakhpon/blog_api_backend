@@ -11,13 +11,23 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 const port = process.env.PORT || 5000;
+const keys = require('./config/keys');
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/blogDB", {useNewUrlParser: true});
+// Map global promises
+mongoose.Promise = global.Promise;
+// Mongoose Connect
+mongoose.connect(keys.mongoURI, {
+  useNewUrlParser: true
+})
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
+
 
 const postSchema = {
   title: String,
